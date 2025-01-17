@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Quiz App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+        #quiz-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+        h2 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .answer-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .answer-btn:hover {
+            background: #2980b9;
+        }
+        #score-container {
+            display: none;
+        }
+        .restart-btn {
+            background: #2ecc71;
+            padding: 12px 25px;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+        .restart-btn:hover {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h2 id="question">Loading Question...</h2>
+        <div id="answer-options">
+            <button class="answer-btn" onclick="checkAnswer(0)">Option 1</button>
+            <button class="answer-btn" onclick="checkAnswer(1)">Option 2</button>
+            <button class="answer-btn" onclick="checkAnswer(2)">Option 3</button>
+            <button class="answer-btn" onclick="checkAnswer(3)">Option 4</button>
+        </div>
+        <div id="score-container">
+            <h3>Your Score: <span id="score">0</span> / <span id="total-questions">0</span></h3>
+            <button class="restart-btn" onclick="startQuiz()">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], correctAnswer: 2 },
+            { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], correctAnswer: 1 },
+            { question: "Who wrote 'Romeo and Juliet'?", options: ["Shakespeare", "Dickens", "Hemingway", "Austen"], correctAnswer: 0 },
+            { question: "What is the largest ocean on Earth?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], correctAnswer: 3 }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("score-container").style.display = "none";
+            document.getElementById("quiz-container").style.display = "block";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            const buttons = document.querySelectorAll(".answer-btn");
+            buttons.forEach((btn, index) => {
+                btn.innerText = currentQuestion.options[index];
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (selectedIndex === currentQuestion.correctAnswer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quiz-container").style.transform = "scale(0.9)";
+            setTimeout(() => {
+                document.getElementById("quiz-container").style.display = "none";
+                const scoreContainer = document.getElementById("score-container");
+                scoreContainer.style.display = "block";
+                document.getElementById("score").innerText = score;
+                document.getElementById("total-questions").innerText = questions.length;
+            }, 300);
+        }
+
+        window.onload = startQuiz;
+    </script>
+</body>
+</html>
